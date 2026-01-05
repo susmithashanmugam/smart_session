@@ -1,0 +1,9 @@
+fastapi → backend framework
+
+uvicorn → ASGI server
+
+opencv-python → frame decoding
+
+mediapipe → facial landmarks
+
+numpy → math
