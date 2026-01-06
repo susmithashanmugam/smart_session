@@ -8,10 +8,11 @@ body,
   padding: 0;
 }
 
-/* 🔥 CENTER EVERYTHING FROM ROOT */
+/* 🔥 CENTER FROM ROOT */
 #root {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f4f9ff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
