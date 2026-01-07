@@ -9,9 +9,7 @@ from backend.vision.gaze import estimate_gaze
 from backend.vision.confusion import calculate_confusion
 from backend.vision.gaze import estimate_gaze
 
-# -------------------------------
-# Shared state for teacher view
-# -------------------------------
+
 latest_state = {
     "status": "WAITING",
     "face_count": 0,
@@ -20,9 +18,6 @@ latest_state = {
 }
 
 
-# -------------------------------
-# Helper: Decode base64 frame
-# -------------------------------
 def decode_frame(frame_data):
     img_bytes = base64.b64decode(frame_data)
     img_array = np.frombuffer(img_bytes, dtype=np.uint8)
@@ -30,10 +25,6 @@ def decode_frame(frame_data):
     return frame
 
 
-# -------------------------------
-# STUDENT WebSocket
-# Receives frames + updates state
-# -------------------------------
 async def student_socket(websocket: WebSocket):
     await websocket.accept()
 
@@ -56,7 +47,7 @@ async def student_socket(websocket: WebSocket):
             if confusion_score >= 0.6:
                 is_confused = True
 
-        # Final status decision
+     
         if result["face_count"] != 1:
             status = "PROCTOR_ALERT"
         elif gaze != "CENTER":
@@ -66,7 +57,7 @@ async def student_socket(websocket: WebSocket):
         else:
             status = "FOCUSED"
 
-        # 🔥 Update shared state (IMPORTANT)
+       
         latest_state.update({
             "status": status,
             "face_count": result["face_count"],
@@ -74,14 +65,10 @@ async def student_socket(websocket: WebSocket):
             "confusion_score": confusion_score,
         })
 
-        # Send response back to student
+       
         await websocket.send_json(latest_state)
 
 
-# -------------------------------
-# TEACHER WebSocket
-# Only sends latest state
-# -------------------------------
 async def teacher_socket(websocket: WebSocket):
     await websocket.accept()
 
